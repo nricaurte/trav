@@ -1,12 +1,13 @@
-package test_travis;
+package test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import test_travis.Operaciones;
+import travis.Operaciones;
 
-public class test_junit {
+public class OperacionesTest {
+
 
 	@Test
     public void testSumar() {
@@ -57,6 +58,5 @@ public class test_junit {
         assertEquals(expResult, result);
 
     }
-
 
 }

@@ -3,17 +3,17 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="trav">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="travis">
     <property environment="env"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
     <path id="JUnit 4.libraryclasspath">
-        <pathelement location="D:/eclipse/plugins/org.junit_4.11.0.v201303080030/junit.jar"/>
-        <pathelement location="D:/eclipse/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+        <pathelement location="../../plugins/org.junit_4.11.0.v201303080030/junit.jar"/>
+        <pathelement location="../../plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
     </path>
-    <path id="trav.classpath">
+    <path id="travis.classpath">
         <pathelement location="bin"/>
         <path refid="JUnit 4.libraryclasspath"/>
     </path>
@@ -21,6 +21,7 @@
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -35,7 +36,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="trav.classpath"/>
+            <classpath refid="travis.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -52,28 +53,13 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="main (1)">
-        <java classname="test_travis.main" failonerror="true" fork="yes">
-            <classpath refid="trav.classpath"/>
-        </java>
-    </target>
-    <target name="trav">
+    <target name="travis">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test_travis.test_junit" todir="${junit.output.dir}"/>
-            <classpath refid="trav.classpath"/>
+            <test name="test.OperacionesTest" todir="${junit.output.dir}"/>
+            <classpath refid="travis.classpath"/>
         </junit>
-    </target>
-    <target name="JUnitCore">
-        <java classname="org.junit.runner.JUnitCore" failonerror="true" fork="yes">
-            <classpath refid="trav.classpath"/>
-        </java>
-    </target>
-    <target name="TestRunner">
-        <java classname="junit.textui.TestRunner" failonerror="true" fork="yes">
-            <classpath refid="trav.classpath"/>
-        </java>
     </target>
     <target name="junitreport">
         <junitreport todir="${junit.output.dir}">
